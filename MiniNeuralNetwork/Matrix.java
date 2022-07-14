@@ -1,4 +1,4 @@
-package NeuralNetworks;
+package MiniNeuralNetwork;
 
 public class Matrix {
 	int rows;
@@ -123,7 +123,7 @@ public class Matrix {
 		data[row][col] += x;
 	}
 	
-	void map(Equation e) {
+	void map(Function e) {
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < cols; j++) {
 				data[i][j] = e.f(data[i][j], i, j);
@@ -131,7 +131,7 @@ public class Matrix {
 		}
 	}
 	
-	static Matrix map(Matrix m, Equation e) {
+	static Matrix map(Matrix m, Function e) {
 		Matrix result = new Matrix(m.rows, m.cols);
 		for(int i = 0; i < m.rows; i++) {
 			for(int j = 0; j < m.cols; j++) {

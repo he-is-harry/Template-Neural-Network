@@ -1,4 +1,4 @@
-package FasterNeuralNetwork;
+package MiniNeuralNetwork;
 
 import java.awt.Canvas;
 import java.awt.Dimension;

@@ -1,4 +1,4 @@
-package NeuralNetworks;
+package MiniNeuralNetwork;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -55,13 +55,13 @@ public class XORDemo extends Canvas implements Runnable{
             }
             if (running) {
                 render();
-//                if(delta < 1) {
-//                	try {
-//						Thread.sleep((long)(1000 / amountOfTicks - 500 / amountOfTicks));
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//                }
+                if(delta < 1) {
+                	try {
+						Thread.sleep((long)(1000 / amountOfTicks - 500 / amountOfTicks));
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+                }
             }
             frames++;
             if (System.currentTimeMillis() - timer > 1000) {
@@ -112,6 +112,9 @@ public class XORDemo extends Canvas implements Runnable{
 				double y = 0;
 				try {
 					y = nn.predict(inputs)[0];
+//					if(y > 1) {
+//						y = 1;
+//					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

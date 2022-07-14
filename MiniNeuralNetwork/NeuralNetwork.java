@@ -1,15 +1,6 @@
-package NeuralNetworks;
+package MiniNeuralNetwork;
 
 public class NeuralNetwork {
-	public static class ActivationFunction {
-		Equation func;
-		Equation dfunc;
-		public ActivationFunction(Equation func, Equation dfunc) {
-			this.func = func;
-			this.dfunc = dfunc;
-		}
-	}
-	
 	int input_nodes;
 	int hidden_nodes;
 	int output_nodes;
@@ -21,7 +12,8 @@ public class NeuralNetwork {
 	
 	double learningRate;
 	
-	ActivationFunction activation_function;
+	Function activation_function;
+	Function activation_function_d;
 	
 	public NeuralNetwork(int input_nodes, int hidden_nodes, int output_nodes) {
 		this.input_nodes = input_nodes;
@@ -39,18 +31,17 @@ public class NeuralNetwork {
 		bias_o.randomize();
 		
 		learningRate = 0.1;
-		activation_function = new ActivationFunction(
-				new Equation("1 / (1 + (e ^ -x))"), new Equation("x * (1 - x)"));
+		setActivationFunction("Sigmoid");
 	}
 	
 	double [] predict(Matrix input) throws Exception {
 		Matrix hidden = Matrix.multiply(weights_ih, input);
 		hidden.add(bias_h);
-		hidden.map(activation_function.func);
+		hidden.map(activation_function);
 		
 		Matrix outputs = Matrix.multiply(weights_ho, hidden);
 		outputs.add(bias_o);
-		outputs.map(activation_function.func);
+		outputs.map(activation_function);
 		
 		return outputs.toArray();
 	}
@@ -59,11 +50,11 @@ public class NeuralNetwork {
 		Matrix input = Matrix.fromArray(input_array);
 		Matrix hidden = Matrix.multiply(weights_ih, input);
 		hidden.add(bias_h);
-		hidden.map(activation_function.func);
+		hidden.map(activation_function);
 		
 		Matrix outputs = Matrix.multiply(weights_ho, hidden);
 		outputs.add(bias_o);
-		outputs.map(activation_function.func);
+		outputs.map(activation_function);
 		
 		return outputs.toArray();
 	}
@@ -72,11 +63,11 @@ public class NeuralNetwork {
 		Matrix inputs = Matrix.fromArray(input_array);
 		Matrix hidden = Matrix.multiply(weights_ih, inputs);
 		hidden.add(bias_h);
-		hidden.map(activation_function.func);
+		hidden.map(activation_function);
 		
 		Matrix outputs = Matrix.multiply(weights_ho, hidden);
 		outputs.add(bias_o);
-		outputs.map(activation_function.func);
+		outputs.map(activation_function);
 		
 		// Calculate the output error and change the 
 		// weights of the hidden - output by the 
@@ -84,7 +75,7 @@ public class NeuralNetwork {
 		Matrix targets = Matrix.fromArray(target_array);
 		Matrix output_errors = Matrix.subtract(targets, outputs);
 		
-		Matrix gradients = Matrix.map(outputs, activation_function.dfunc);
+		Matrix gradients = Matrix.map(outputs, activation_function_d);
 		gradients.multiply(output_errors);
 		gradients.multiply(learningRate);
 		
@@ -97,7 +88,7 @@ public class NeuralNetwork {
 		Matrix who_t = Matrix.transpose(weights_ho);
 		Matrix hidden_errors = Matrix.multiply(who_t, output_errors);
 		
-		Matrix hidden_gradient = Matrix.map(hidden, activation_function.dfunc);
+		Matrix hidden_gradient = Matrix.map(hidden, activation_function_d);
 		hidden_gradient.multiply(hidden_errors);;
 		hidden_gradient.multiply(learningRate);
 		
@@ -108,7 +99,7 @@ public class NeuralNetwork {
 		bias_h.add(hidden_gradient);
 	}
 	
-	void mutate(Equation e) {
+	void mutate(Function e) {
 		weights_ih.map(e);
 		weights_ho.map(e);
 		bias_h.map(e);
@@ -119,8 +110,9 @@ public class NeuralNetwork {
 		this.learningRate = learningRate;
 	}
 	
-	void setActivationFunction(Equation func, Equation dfunc) {
-		activation_function = new ActivationFunction(func, dfunc);
+	void setActivationFunction(String type) {
+		activation_function = new Function(type, false);
+		activation_function_d = new Function(type, true);
 	}
 	
 }
