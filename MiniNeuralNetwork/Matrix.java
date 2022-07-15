@@ -69,7 +69,7 @@ public class Matrix {
 		double [] arr = new double[rows * cols];
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < cols; j++) {
-				arr[i * rows + j] = data[i][j];
+				arr[i * cols + j] = data[i][j];
 			}
 		}
 		return arr;
