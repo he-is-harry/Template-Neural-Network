@@ -43,6 +43,19 @@ public class NeuralNetwork {
 		setActivationFunction("Sigmoid");
 	}
 	
+	public NeuralNetwork(NeuralNetwork nn) {
+		this.input_nodes = nn.input_nodes;
+		this.hidden_nodes = nn.hidden_nodes;
+		this.output_nodes = nn.output_nodes;
+		this.weights_ih = nn.weights_ih.copy();
+		this.weights_ho = nn.weights_ho.copy();
+		this.bias_h = nn.bias_h.copy();
+		this.bias_o = nn.bias_o.copy();
+		this.learningRate = nn.learningRate;
+		this.activation_function = nn.activation_function;
+		this.activation_function_d = nn.activation_function_d;
+	}
+	
 	double [] predict(Matrix input) throws Exception {
 		Matrix hidden = Matrix.multiply(weights_ih, input);
 		hidden.add(bias_h);
@@ -108,11 +121,15 @@ public class NeuralNetwork {
 		bias_h.add(hidden_gradient);
 	}
 	
-	void mutate(Function e) {
-		weights_ih.map(e);
-		weights_ho.map(e);
-		bias_h.map(e);
-		bias_o.map(e);
+	void mutate(Function e, double rate) {
+		weights_ih.map(e, rate);
+		weights_ho.map(e, rate);
+		bias_h.map(e, rate);
+		bias_o.map(e, rate);
+	}
+	
+	NeuralNetwork copy() {
+		return new NeuralNetwork(this);
 	}
 	
 	void setLearningRate(double learningRate) {

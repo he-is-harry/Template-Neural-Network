@@ -5,6 +5,7 @@ public class Function {
 	int type;
 	// 0 - Sigmoid
 	// 1 - Hyperbolic Tangent
+	// 2 - Default Mutate
 	// Add MORE HERE
 	boolean derivative;
 	public Function(String type, boolean derivative) {
@@ -16,6 +17,9 @@ public class Function {
 		} else if(type.equalsIgnoreCase("Hyperbolic Tangent") || type.equalsIgnoreCase("tanh")
 				|| type.equalsIgnoreCase("th") || type.equalsIgnoreCase("Hyper Tan")) {
 			this.type = 1;
+		} else if(type.equalsIgnoreCase("Default Mutate") || type.equalsIgnoreCase("dMut")
+				|| type.equalsIgnoreCase("dm") || type.equalsIgnoreCase("Random Mutate")) {
+			this.type = 2;
 		} else {
 			System.out.println("!!! No function of type \"" + type + "\" found");
 		}
@@ -56,6 +60,18 @@ public class Function {
 		return 0x3f3f3f;
 	}
 	
+	double f(double x, double rate) {
+		if(type == 2) {
+			if(derivative) {
+				
+			} else {
+				return defaultMutate(x, rate);
+			}
+		}
+		System.out.println("Function Does Not Match Parameters");
+		return 0x3f3f3f;
+	}
+	
 	double sigmoid(double x) {
 		return 1 / (1 + Math.exp(-x));
 	}
@@ -70,5 +86,12 @@ public class Function {
 	
 	double dtanh(double y) {
 		return 1 - (y * y);
+	}
+	
+	double defaultMutate(double x, double rate) {
+		if(Math.random() < rate) {
+			return Math.random() * 2 - 1;
+		}
+		return x;
 	}
 }

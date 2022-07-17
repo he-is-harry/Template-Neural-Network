@@ -136,6 +136,14 @@ public class Matrix {
 		}
 	}
 	
+	void map(Function e, double rate) {
+		for(int i = 0; i < rows; i++) {
+			for(int j = 0; j < cols; j++) {
+				data[i][j] = e.f(data[i][j], rate);
+			}
+		}
+	}
+	
 	static Matrix map(Matrix m, Function e) {
 		Matrix result = new Matrix(m.rows, m.cols);
 		for(int i = 0; i < m.rows; i++) {
@@ -144,6 +152,16 @@ public class Matrix {
 			}
 		}
 		return result;
+	}
+	
+	Matrix copy() {
+		Matrix m = new Matrix(rows, cols);
+		for(int i = 0; i < rows; i++) {
+			for(int j = 0; j < cols; j++) {
+				m.data[i][j] = data[i][j];
+			}
+		}
+		return m;
 	}
 	
 	void print() {
