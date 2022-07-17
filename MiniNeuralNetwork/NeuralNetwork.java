@@ -1,5 +1,14 @@
 package MiniNeuralNetwork;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+
 public class NeuralNetwork {
 	int input_nodes;
 	int hidden_nodes;
@@ -113,6 +122,40 @@ public class NeuralNetwork {
 	void setActivationFunction(String type) {
 		activation_function = new Function(type, false);
 		activation_function_d = new Function(type, true);
+	}
+	
+	void serialize(String name) throws IOException {
+		PrintWriter pw = new PrintWriter(new FileWriter(name));
+		pw.println(input_nodes);
+		pw.println(hidden_nodes);
+		pw.println(output_nodes);
+		pw.println(learningRate);
+		pw.println(activation_function.strType);
+		weights_ih.serialize(pw);
+		weights_ho.serialize(pw);
+		bias_h.serialize(pw);
+		bias_o.serialize(pw);
+		pw.close();
+	}
+	
+	void deserialize(String name) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(name)));
+		StringTokenizer st;
+		st = new StringTokenizer(br.readLine().trim());
+		input_nodes = Integer.parseInt(st.nextToken());
+		st = new StringTokenizer(br.readLine().trim());
+		hidden_nodes = Integer.parseInt(st.nextToken());
+		st = new StringTokenizer(br.readLine().trim());
+		output_nodes = Integer.parseInt(st.nextToken());
+		st = new StringTokenizer(br.readLine().trim());
+		learningRate = Double.parseDouble(st.nextToken());
+		String strType = br.readLine().trim();
+		activation_function = new Function(strType, false);
+		activation_function_d = new Function(strType, true);
+		weights_ih.deserialize(br, st);
+		weights_ho.deserialize(br, st);
+		bias_h.deserialize(br, st);
+		bias_o.deserialize(br, st);
 	}
 	
 }

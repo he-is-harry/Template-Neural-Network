@@ -1,12 +1,14 @@
 package MiniNeuralNetwork;
 
 public class Function {
+	String strType;
 	int type;
 	// 0 - Sigmoid
 	// 1 - Hyperbolic Tangent
 	// Add MORE HERE
 	boolean derivative;
 	public Function(String type, boolean derivative) {
+		this.strType = type;
 		this.type = -1;
 		if(type.equalsIgnoreCase("Sigmoid") || type.equals("Sigma") || 
 				type.equalsIgnoreCase("s")) {

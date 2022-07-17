@@ -1,5 +1,10 @@
 package MiniNeuralNetwork;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+
 public class Matrix {
 	int rows;
 	int cols;
@@ -149,5 +154,30 @@ public class Matrix {
 			System.out.println();
 		}
 		System.out.println();
+	}
+	
+	void serialize(PrintWriter pw) {
+		pw.println(rows + " " + cols);
+		for(int i = 0; i < rows; i++) {
+			for(int j = 0; j < cols; j++) {
+				if(j == cols - 1) {
+					pw.println(data[i][j]);
+				} else {
+					pw.print(data[i][j] + " ");
+				}
+			}
+		}
+	}
+	void deserialize(BufferedReader br, StringTokenizer st) throws IOException {
+		st = new StringTokenizer(br.readLine().trim());
+		rows = Integer.parseInt(st.nextToken());
+		cols = Integer.parseInt(st.nextToken());
+		data = new double[rows][cols];
+		for(int i = 0; i < rows; i++) {
+			st = new StringTokenizer(br.readLine().trim());
+			for(int j = 0; j < cols; j++) {
+				data[i][j] = Double.parseDouble(st.nextToken());
+			}
+		}
 	}
 }
