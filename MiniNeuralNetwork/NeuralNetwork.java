@@ -2,7 +2,6 @@ package MiniNeuralNetwork;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,18 +28,18 @@ public class NeuralNetwork {
 		this.hidden_nodes = hidden_nodes;
 		this.output_nodes = output_nodes;
 		
-		weights_ih = new Matrix(this.hidden_nodes, this.input_nodes);
-		weights_ho = new Matrix(this.output_nodes, this.hidden_nodes);
-		weights_ih.randomize();
-		weights_ho.randomize();
+		this.weights_ih = new Matrix(this.hidden_nodes, this.input_nodes);
+		this.weights_ho = new Matrix(this.output_nodes, this.hidden_nodes);
+		this.weights_ih.randomize();
+		this.weights_ho.randomize();
 		
-		bias_h = new Matrix(this.hidden_nodes, 1);
-		bias_o = new Matrix(this.output_nodes, 1);
-		bias_h.randomize();
-		bias_o.randomize();
+		this.bias_h = new Matrix(this.hidden_nodes, 1);
+		this.bias_o = new Matrix(this.output_nodes, 1);
+		this.bias_h.randomize();
+		this.bias_o.randomize();
 		
-		learningRate = 0.1;
-		setActivationFunction("Sigmoid");
+		this.learningRate = 0.1;
+		this.setActivationFunction("Sigmoid");
 	}
 	
 	public NeuralNetwork(NeuralNetwork nn) {
@@ -54,6 +53,21 @@ public class NeuralNetwork {
 		this.learningRate = nn.learningRate;
 		this.activation_function = nn.activation_function;
 		this.activation_function_d = nn.activation_function_d;
+	}
+	
+	public NeuralNetwork(int input_nodes, int hidden_nodes, int output_nodes, 
+			Matrix weights_ih, Matrix weights_ho, Matrix bias_h, Matrix bias_o) {
+		this.input_nodes = input_nodes;
+		this.hidden_nodes = hidden_nodes;
+		this.output_nodes = output_nodes;
+		
+		this.weights_ih = weights_ih;
+		this.weights_ho = weights_ho;
+		this.bias_h = bias_h;
+		this.bias_o = bias_o;
+		
+		learningRate = 0.1;
+		setActivationFunction("Sigmoid");
 	}
 	
 	double [] predict(Matrix input) throws Exception {
@@ -130,6 +144,20 @@ public class NeuralNetwork {
 	
 	NeuralNetwork copy() {
 		return new NeuralNetwork(this);
+	}
+	
+	static NeuralNetwork crossover(NeuralNetwork nn1, NeuralNetwork nn2) throws Exception {
+		if(nn1.input_nodes != nn2.input_nodes || nn2.hidden_nodes != nn2.hidden_nodes ||
+				nn1.output_nodes != nn2.output_nodes) {
+			System.out.println("Error: Numbers of nodes in nn1 and nn2 must match");
+			throw new Exception("Network Crossover Error");
+		}
+		Matrix weights_ih_cross = Matrix.crossover(nn1.weights_ih, nn2.weights_ih);
+		Matrix weights_ho_cross = Matrix.crossover(nn1.weights_ho, nn2.weights_ho);
+		Matrix bias_h_cross = Matrix.crossover(nn1.bias_h, nn2.bias_h);
+		Matrix bias_o_cross = Matrix.crossover(nn1.bias_o, nn2.bias_o);
+		return new NeuralNetwork(nn1.input_nodes, nn1.hidden_nodes, nn1.output_nodes, 
+				weights_ih_cross, weights_ho_cross, bias_h_cross, bias_o_cross);
 	}
 	
 	void setLearningRate(double learningRate) {

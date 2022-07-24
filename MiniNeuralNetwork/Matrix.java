@@ -164,6 +164,20 @@ public class Matrix {
 		return m;
 	}
 	
+	static Matrix crossover(Matrix m1, Matrix m2) {
+		Matrix result = new Matrix(m1.rows, m1.cols);
+		for(int i = 0; i < result.rows; i++) {
+			for(int j = 0; j < result.cols; j++) {
+				if(Math.random() < 0.5) {
+					result.data[i][j] = m1.data[i][j];
+				} else {
+					result.data[i][j] = m2.data[i][j];
+				}
+			}
+		}
+		return result;
+	}
+	
 	void print() {
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < cols; j++) {
